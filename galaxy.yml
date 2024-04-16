@@ -1,9 +1,9 @@
 namespace: zjleblanc
 name: tmdb
-version: 1.0.1
+version: semantic_version
 
 authors:
-- Zach LeBlanc <zjleblanc3@gmail.com>
+- Zach LeBlanc <@zjleblanc>
 description: The Movie Database (TMDB) automation content
 readme: README.md
 
