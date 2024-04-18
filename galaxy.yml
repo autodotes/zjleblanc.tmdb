@@ -12,7 +12,7 @@ license_file: LICENSE
 tags:
   - tmdb
   - movies
-  - tv shows
+  - tv
 
 repository: https://github.com/zjleblanc/zjleblanc.tmdb
 documentation: https://github.com/zjleblanc/zjleblanc.tmdb/blob/master/README.md
