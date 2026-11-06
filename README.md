@@ -1,48 +1,73 @@
 # Ansible Collection - zjleblanc.tmdb
 
-The tmdb collection contains modules for automating [The Movie Database](https://www.themoviedb.org/) API.
+The Movie Database (TMDB) automation content.
 
-## Automated collection build 
+[Galaxy](https://galaxy.ansible.com/ui/repo/published/zjleblanc/tmdb/) | [Changelog](CHANGELOG.md)
 
-This repo contains a blueprint for automating your collection builds using GitHub workflows and semantic versioning.
+## Requirements
 
-> Semantic versioning refers to the method which uses contents of a commit message (or pull request) to increment the major, minor, or patch component of a product's version.
+- Ansible `>=2.15.0`
+- A TMDB API key and account credentials, passed as module options or through `TMDB_API`, `TMDB_API_KEY`, `TMDB_USERNAME`, `TMDB_PASSWORD`, and `TMDB_ACCOUNT_ID`
 
-Below are the important components which enable semantic versioning in this repository:
+## Contents
 
-| Component | Purpose |
+### Playbooks
+
+| Name | Description |
 | --- | --- |
-| [ansible.cfg template](ansible.cfg.publish) | Defines galaxy servers with tokenized values for security which are injected using GitHub secrets at runtime. This determines **where** the collections are published. |
-| [galaxy.yml](galaxy.yml) | The galaxy file is used to define metadata about the collection itself - for semantic versioning we tokenize the version value to be set dynamically during the build. |
-| [increment-tag.sh](.github/scripts/increment-tag.sh) | This script uses repository tags to determine the current version and processes the associated commit message to properly increment the version. By default, the patch (or z) component will be incremented. Check out the script to understand how major, minor versions are incremented. |
-| [publish.yml](.github/workflows/publish.yml) | The workflow brings everything together - dependencies to build are installed, tokens injected, version set, and collection published. The example in this repository is setup for a manual trigger, but you can modify it to run on pull request merge, commit, etc. |
+| [tmdb_collection](playbooks/tmdb_collection.yml) | List, add, and remove a favorite movie. |
+| [tmdb_uri](playbooks/tmdb_uri.yml) | Authenticate to TMDB with the URI module and list favorite movies. |
 
+Variables and run examples are in [playbooks/README.md](playbooks/README.md).
 
-## Installing this collection
+### Modules
 
-You can install the infra.ee_utilities collection with the Ansible Galaxy CLI:
+| Name | Description |
+| --- | --- |
+| [favorite_movies](plugins/modules/favorite_movies.py) | Update favorite movies for a TMDB account |
+| [favorite_movies_info](plugins/modules/favorite_movies_info.py) | Retrieve favorite movies for a TMDB account |
 
-    ansible-galaxy collection install zjleblanc.tmdb
+#### favorite_movies
 
-You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
-
-<!-- markdownlint-disable MD046 -->
 ```yaml
----
-collections:
-  - name: zjleblanc.tmdb
-    # If you need a specific version of the collection, you can specify like this:
-    # version: ...
+- name: Add a favorite movie
+  zjleblanc.tmdb.favorite_movies:
+    api_url: https://api.themoviedb.org/3
+    api_key: "{{ lookup('ansible.builtin.env', 'TMDB_API_KEY') }}"
+    username: "{{ lookup('ansible.builtin.env', 'TMDB_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'TMDB_PASSWORD') }}"
+    account_id: "12345"
+    movie_id: "438631"
+
+- name: Remove a favorite movie
+  zjleblanc.tmdb.favorite_movies:
+    api_url: https://api.themoviedb.org/3
+    api_key: "{{ lookup('ansible.builtin.env', 'TMDB_API_KEY') }}"
+    username: "{{ lookup('ansible.builtin.env', 'TMDB_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'TMDB_PASSWORD') }}"
+    account_id: "12345"
+    movie_id: "438631"
+    state: absent
 ```
 
-## Using this collection
+#### favorite_movies_info
 
-### See Also
+```yaml
+- name: Get favorite movies
+  zjleblanc.tmdb.favorite_movies_info:
+    api_url: https://api.themoviedb.org/3
+    api_key: "{{ lookup('ansible.builtin.env', 'TMDB_API_KEY') }}"
+    username: "{{ lookup('ansible.builtin.env', 'TMDB_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'TMDB_PASSWORD') }}"
+    account_id: "12345"
+```
 
-* [Ansible Using collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html) for more details.
+## Installation
 
-## Licensing
+```bash
+ansible-galaxy collection install zjleblanc.tmdb
+```
 
-GNU General Public License v3.0 or later.
+## License
 
-See [LICENCE](https://www.gnu.org/licenses/gpl-3.0.txt) to see the full text.
+GNU General Public License v3.0 or later. See [LICENSE](LICENSE).

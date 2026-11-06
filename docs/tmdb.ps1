@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
 	Manages TMDB Account Favorites using the TMDB API
@@ -48,17 +49,17 @@ $Token = (Invoke-WebRequest -Uri $url -Method GET -UseBasicParsing | ConvertFrom
 
 # Validate token with login
 $url = "$env:TMDB_API/authentication/token/validate_with_login?api_key=$env:TMDB_API_KEY"
-$body = @{ 
+$body = @{
   'username' = $env:TMDB_USERNAME
   'password' = $env:TMDB_PASSWORD
-  'request_token' = $Token 
+  'request_token' = $Token
 }
 Invoke-WebRequest -Uri $url -Method POST -ContentType "application/json" -Body ($body|ConvertTo-Json) | Out-Null
 
 # Create session
 $url = "$env:TMDB_API/authentication/session/new?api_key=$env:TMDB_API_KEY"
 $body = @{
-  'request_token' = $Token 
+  'request_token' = $Token
 }
 $Session = (Invoke-WebRequest -Uri $url -Method POST -ContentType "application/json" -Body ($body|ConvertTo-Json) -UseBasicParsing | ConvertFrom-Json).session_id
 
@@ -75,7 +76,7 @@ if(Test-Favorite -TestMovieId $MovieId -TestFavorites $favorites) {
 }
 else {
   $url = "$env:TMDB_API/account/$AccountId/favorite?$AuthQuery"
-  $body = @{ 
+  $body = @{
     'media_type' = 'movie'
     'media_id' = $MovieId
     'favorite' = $true
@@ -91,7 +92,7 @@ $favorites = (Invoke-WebRequest -Uri $url -Method GET -UseBasicParsing | Convert
 # Remove Dune from favorite movies
 if(Test-Favorite -TestMovieId $MovieId -TestFavorites $favorites) {
   $url = "$env:TMDB_API/account/$AccountId/favorite?$AuthQuery"
-  $body = @{ 
+  $body = @{
     'media_type' = 'movie'
     'media_id' = $MovieId
     'favorite' = $false

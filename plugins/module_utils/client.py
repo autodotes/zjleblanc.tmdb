@@ -44,10 +44,10 @@ class TMDBClient():
 
         if resp.status != 200:
             raise TMDBResponseException(f"Failed to create request token: status code {resp.status}")
-        
+
         data = json.loads(resp.read())
         return data['request_token']
-    
+
     def _validate_token(self, request_token: str) -> None:
       path = "/authentication/token/validate_with_login"
       params = {"api_key": self.api_key}
@@ -60,7 +60,7 @@ class TMDBClient():
 
       if resp.status != 200:
             raise TMDBResponseException(f"Failed to validate request token: status code {resp.status}")
-      
+
     def _create_session(self, request_token) -> str:
       path = "/authentication/session/new"
       params = {"api_key": self.api_key}
@@ -69,7 +69,7 @@ class TMDBClient():
 
       if resp.status != 200:
             raise TMDBResponseException(f"Failed to create new session: status code {resp.status}")
-      
+
       data = json.loads(resp.read())
       return data['session_id']
 
@@ -79,7 +79,7 @@ class TMDBClient():
                 f"Missing input parameters (one of):"
                 f"tmdb_api_key, tmdb_username, tmdb_password"
             )
-        
+
         try:
             request_token = self._get_request_token()
             self._validate_token(request_token)

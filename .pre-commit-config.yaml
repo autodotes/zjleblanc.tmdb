@@ -1,0 +1,74 @@
+---
+ci:
+  autoupdate_schedule: monthly
+  autoupdate_commit_msg: "chore: pre-commit autoupdate"
+  autofix_commit_msg: "chore: auto fixes from pre-commit hooks"
+  # .ansible-lint sets offline: true, so pre-commit.ci cannot install
+  # collection dependencies such as community.general and community.crypto.
+  skip:
+    - ansible-lint
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: fix-byte-order-marker
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-symlinks
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+        # Filter, lookup, and callback plugins ship a Python shebang and are
+        # loaded by Ansible rather than executed directly.
+        exclude: ^(plugins|extensions)/
+      - id: detect-private-key
+      - id: debug-statements
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-toml
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args: [-c=.yamllint, --strict]
+        files: \.(yaml|yml)$
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.3
+    hooks:
+      - id: ruff
+        name: ruff
+        files: ^(plugins|extensions)/.*\.py$
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        args: [--shell=bash]
+
+  # Keep ansible-lint last. It lints the collection from the repository root
+  # and ignores the filenames pre-commit would otherwise pass.
+  # https://github.com/ansible/ansible-lint/issues/611
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v26.11.0
+    hooks:
+      - id: ansible-lint
+        # Overrides the hook default, so the ansible-core pin has to stay.
+        # The ansible community package provides community.general and
+        # community.crypto inside the hook environment. .ansible-lint is
+        # offline and will not install those collections at runtime.
+        additional_dependencies:
+          - ansible-core>=2.19.0
+          - ansible==14.2.0

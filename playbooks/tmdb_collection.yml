@@ -3,12 +3,21 @@
   hosts: localhost
   gather_facts: false
   become: false
+  vars:
+    tmdb_api_url: "{{ lookup('ansible.builtin.env', 'TMDB_API') }}"
+    tmdb_api_key: "{{ lookup('ansible.builtin.env', 'TMDB_API_KEY') }}"
+    tmdb_username: "{{ lookup('ansible.builtin.env', 'TMDB_USERNAME') }}"
+    tmdb_password: "{{ lookup('ansible.builtin.env', 'TMDB_PASSWORD') }}"
 
   tasks:
     - name: Get favorite movies
       register: r_fav_movies
       zjleblanc.tmdb.favorite_movies_info:
-        account_id: 20850360
+        api_url: "{{ tmdb_api_url }}"
+        api_key: "{{ tmdb_api_key }}"
+        username: "{{ tmdb_username }}"
+        password: "{{ tmdb_password }}"
+        account_id: "20850360"
 
     - name: Debug response
       ansible.builtin.debug:
@@ -17,8 +26,12 @@
     - name: Add Dune to favorites
       register: r_add_dune
       zjleblanc.tmdb.favorite_movies:
-        account_id: 20850360
-        movie_id: 438631
+        api_url: "{{ tmdb_api_url }}"
+        api_key: "{{ tmdb_api_key }}"
+        username: "{{ tmdb_username }}"
+        password: "{{ tmdb_password }}"
+        account_id: "20850360"
+        movie_id: "438631"
 
     - name: Debug response
       ansible.builtin.debug:
@@ -27,8 +40,12 @@
     - name: Remove Dune from favorites
       register: r_del_dune
       zjleblanc.tmdb.favorite_movies:
-        account_id: 20850360
-        movie_id: 438631
+        api_url: "{{ tmdb_api_url }}"
+        api_key: "{{ tmdb_api_key }}"
+        username: "{{ tmdb_username }}"
+        password: "{{ tmdb_password }}"
+        account_id: "20850360"
+        movie_id: "438631"
         state: absent
 
     - name: Debug response

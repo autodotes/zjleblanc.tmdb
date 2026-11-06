@@ -1,0 +1,9 @@
+[tool.ruff]
+line-length = 160
+src = ["plugins", "extensions"]
+
+[tool.ruff.lint]
+# Syntax and undefined-name checks for collection Python plugins.
+# Style and pyupgrade rules are left off so legacy Ansible plugin code
+# is not rewritten on commit.
+select = ["E9", "F63", "F7", "F82"]

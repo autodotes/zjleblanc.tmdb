@@ -14,38 +14,47 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r"""
 ---
 module: favorite_movies_info
-author: "Zach LeBlanc (@zjleblanc)"
-short_description: Retrieve Favorite Movies for a TMDB account
+version_added: "1.0.0"
+author:
+  - Zach LeBlanc (@zjleblanc)
+short_description: Retrieve favorite movies for a TMDB account
 description:
-  - This module gets movies favorited by a specified TMDB account
+  - Get the movies favorited by a TMDB account.
 options:
   api_url:
     description:
-      - Base url for the TMDB API
+      - Base URL for the TMDB API.
+      - Falls back to the E(TMDB_API) environment variable.
     type: str
     required: true
     version_added: "1.0.0"
   api_key:
     description:
-      - Api Key for the TMDB API
+      - API key for the TMDB API.
+      - Falls back to the E(TMDB_API_KEY) environment variable.
     type: str
     required: true
+    no_log: true
     version_added: "1.0.0"
   username:
     description:
-      - Username for the TMDB API
+      - Username for the TMDB API.
+      - Falls back to the E(TMDB_USERNAME) environment variable.
     type: str
     required: true
     version_added: "1.0.0"
   password:
     description:
-      - Password for the TMDB API
+      - Password for the TMDB API.
+      - Falls back to the E(TMDB_PASSWORD) environment variable.
     type: str
     required: true
+    no_log: true
     version_added: "1.0.0"
   account_id:
     description:
-      - Account ID to retrieve favorite movies from
+      - Account ID to retrieve favorite movies from.
+      - Falls back to the E(TMDB_ACCOUNT_ID) environment variable.
     type: str
     required: true
     version_added: "1.0.0"
@@ -57,12 +66,20 @@ attributes:
 EXAMPLES = r"""
 - name: Get favorite movies
   zjleblanc.tmdb.favorite_movies_info:
-    account_id: 12345
+    api_url: https://api.themoviedb.org/3
+    api_key: "{{ lookup('ansible.builtin.env', 'TMDB_API_KEY') }}"
+    username: "{{ lookup('ansible.builtin.env', 'TMDB_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'TMDB_PASSWORD') }}"
+    account_id: "12345"
 """
 
 RETURN = r"""
+changed:
+  description: Always false. This module only reads favorites.
+  returned: success
+  type: bool
 favorites:
-  description: List of favorite movies
+  description: List of favorite movies.
   returned: success
   type: list
   elements: dict
@@ -70,8 +87,8 @@ favorites:
     - adult: false
       backdrop_path: "/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg"
       genre_ids:
-            - 18
-            - 36
+        - 18
+        - 36
       id: 872585
       original_language: en
       original_title: Oppenheimer
@@ -82,7 +99,7 @@ favorites:
       title: Oppenheimer
       video: false
       vote_average: 8.1
-      vote_count: 6610   
+      vote_count: 6610
 """
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback

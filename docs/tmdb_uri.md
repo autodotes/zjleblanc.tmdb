@@ -87,8 +87,8 @@ Now, we complete each step with the `ansible.builtin.uri` module and register ne
     ⚠️ *Note the use of our previously created request token by referencing the registered var*
     - The response from this request is not required to complete the authentication flow, so I omit the register keyword from this task.
     - The **body_format** parameter instructs ansible to convert the **body** to json and set the Content-Type header for this request to `application/json`.
-  
-3. The final step creates a new session with the validated token 
+
+3. The final step creates a new session with the validated token
     ```yaml
     - name: Create session
       register: r_session
@@ -223,6 +223,6 @@ Forming the json_query can take some practice, but the library is powerful and y
 
 ## what next?
 
-Now that you are comfortable integrating Ansible with third-party APIs, you can start writing custom modules to manage these resources. Developing custom modules will allow you to share the work you have done so that others can easily consume the same APIs. Additionally, you can implement idempotency in your modules and take full advantage of Ansible's ability to achieve and maintain a desired state, only making changes when necessary. 
+Now that you are comfortable integrating Ansible with third-party APIs, you can start writing custom modules to manage these resources. Developing custom modules will allow you to share the work you have done so that others can easily consume the same APIs. Additionally, you can implement idempotency in your modules and take full advantage of Ansible's ability to achieve and maintain a desired state, only making changes when necessary.
 
 Come back later for a link to a future post covering custom module development, continuing the TMDB example...

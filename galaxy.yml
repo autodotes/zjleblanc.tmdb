@@ -1,9 +1,10 @@
+# yaml-language-server: $schema=none
 namespace: zjleblanc
 name: tmdb
-version: semantic_version
+version: 0.0.0-semantic-version
 
 authors:
-- Zach LeBlanc <@zjleblanc>
+  - "Zach LeBlanc <@zjleblanc>"
 description: The Movie Database (TMDB) automation content
 readme: README.md
 
@@ -13,18 +14,25 @@ tags:
   - tmdb
   - movies
   - tv
+  - tools
 
-repository: https://github.com/zjleblanc/zjleblanc.tmdb
-documentation: https://github.com/zjleblanc/zjleblanc.tmdb/blob/master/README.md
-homepage: https://github.com/zjleblanc/zjleblanc.tmdb
-issues: https://github.com/zjleblanc/zjleblanc.tmdb/issues
+repository: https://github.com/autodotes/zjleblanc.tmdb
+documentation: https://github.com/autodotes/zjleblanc.tmdb/blob/main/README.md
+homepage: https://github.com/autodotes/zjleblanc.tmdb
+issues: https://github.com/autodotes/zjleblanc.tmdb/issues
 
 dependencies: {}
+
 build_ignore:
-  - .venv
+  - .ansible-lint
+  - .cursor
+  - .github
   - .gitignore
+  - .pre-commit-config.yaml
+  - .venv
+  - .yamllint
   - ansible.cfg
   - collections
   - docs
+  - pyproject.toml
   - tests
-
