@@ -11,7 +11,7 @@
 .EXAMPLE
 	PS> ./tmdb.ps1 -AccountId 12345 -MovieId 09876
 .LINK
-	https://github.com/zjleblanc/zjleblanc.tmdb/blob/master/docs/tmdb.ps1
+	https://github.com/autodotes/zjleblanc.tmdb/blob/master/docs/tmdb.ps1
 .NOTES
 	Author: Zachary LeBlanc
 #>
